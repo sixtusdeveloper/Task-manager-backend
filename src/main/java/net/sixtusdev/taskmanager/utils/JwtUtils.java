@@ -16,7 +16,6 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 
 @Component
-
 public class JwtUtils {
 
     public String generateToken(UserDetails userDetails) {
@@ -34,13 +33,14 @@ public class JwtUtils {
     }
 
     private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode("c2VjcmV0");
+        byte[] keyBytes = Decoders.BASE64.decode("ytUoTzTqPlmf62oLRjxG9BCRb9cWzNfrA4n48wFq4sJWI3fClYB3g7vQdQFYgU0G");
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String userName = extractUserName(token);
-        return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+        return (userName.equals(userDetails.getUsername()) &&
+                !isTokenExpired(token));
     }
 
     public String extractUserName(String token) {
