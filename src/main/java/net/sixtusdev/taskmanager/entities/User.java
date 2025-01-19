@@ -12,6 +12,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
+import net.sixtusdev.taskmanager.dto.UserDto;
 import net.sixtusdev.taskmanager.enums.UserRole;
 
 @Data
@@ -60,6 +61,16 @@ public class User implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    public UserDto getUserDto() {
+        UserDto userDto = new UserDto();
+        userDto.setId(id);
+        userDto.setName(name);
+        userDto.setEmail(email);
+        userDto.setUserRole(userRole);
+
+        return userDto;
     }
 
 }
