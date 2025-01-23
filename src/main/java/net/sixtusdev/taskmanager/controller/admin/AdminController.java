@@ -1,6 +1,7 @@
 package net.sixtusdev.taskmanager.controller.admin;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -11,6 +12,7 @@ import net.sixtusdev.taskmanager.services.admin.AdminService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
 
 public class AdminController {
     private final AdminService adminService;
