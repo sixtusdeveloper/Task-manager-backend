@@ -12,7 +12,7 @@ import net.sixtusdev.taskmanager.services.admin.AdminService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*")
+@CrossOrigin(origins = "http://localhost:4200", allowedHeaders = "*", allowCredentials = "true")
 
 public class AdminController {
     private final AdminService adminService;
