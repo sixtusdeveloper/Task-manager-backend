@@ -10,14 +10,31 @@ import net.sixtusdev.taskmanager.enums.TaskStatus;
 public class TaskDTO {
 
     private Long id;
+
     private String title;
+
     private String description;
+
     private String priority;
+
     private Date dueDate;
+
     private TaskStatus taskStatus;
 
     private Long employeeId;
 
     private String employeeName;
+
+    public Long getEmployeeId() {
+
+        return employeeId;
+
+    }
+    
+    public void setEmployeeId(Long employeeId) {
+
+        this.employeeId = employeeId;
+
+    }
 
 }
