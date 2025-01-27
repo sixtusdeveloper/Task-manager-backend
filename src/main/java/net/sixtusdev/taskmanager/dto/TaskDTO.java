@@ -21,20 +21,25 @@ public class TaskDTO {
 
     private TaskStatus taskStatus;
 
-    private Long employeeId;
-
     private String employeeName;
 
-    public Long getEmployeeId() {
+    private Long employeeId;
 
-        return employeeId;
+    public String getEmployeeName() {
 
+        return employeeName;
     }
-    
+
+    public void setEmployeeName(String employeeName) {
+        this.employeeName = employeeName;
+    }
+
+    public Long getEmployeeId() {
+        return employeeId;
+    }
+
     public void setEmployeeId(Long employeeId) {
-
         this.employeeId = employeeId;
-
     }
 
 }
