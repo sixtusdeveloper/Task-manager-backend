@@ -2,6 +2,7 @@ package net.sixtusdev.taskmanager.services.admin;
 
 import java.util.Optional;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,7 +43,8 @@ public class AdminServiceImpl implements AdminService {
             task.setTitle(taskDTO.getTitle());
             task.setDescription(taskDTO.getDescription());
             task.setPriority(taskDTO.getPriority());
-            task.setDueDate(taskDTO.getDueDate());
+            task.setDueDate(Optional.ofNullable(taskDTO.getDueDate()).orElse(new Date())); // Or any default value
+            // task.setDueDate(taskDTO.getDueDate()); //Orininal code
             task.setTaskStatus(TaskStatus.INPROGRESS);
             task.setUser(optionalUser.get());
             return taskRepository.save(task).getTaskDTO();
@@ -53,7 +55,11 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public List<TaskDTO> getAllTasks() {
-        return taskRepository.findAll().stream().sorted(Comparator.comparing(Task::getDueDate).reversed())
+
+        return taskRepository.findAll().stream()
+                // .sorted(Comparator.comparing(Task::getDueDate).reversed())
+                .sorted(Comparator.comparing(Task::getDueDate, Comparator.nullsLast(Comparator.naturalOrder()))
+                        .reversed())
                 .map(Task::getTaskDTO).collect(Collectors.toList());
     }
 
