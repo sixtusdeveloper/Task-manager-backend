@@ -72,6 +72,11 @@ public class AdminServiceImpl implements AdminService {
         Pageable pageable = PageRequest.of(page, size);
         return taskRepository.findAll(pageable);
     }
+
+    @Override
+    public void deleteTask(Long taskId) {
+        taskRepository.deleteById(taskId);
+    }
 }
 
 // Original code without the pagination

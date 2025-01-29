@@ -3,7 +3,9 @@ package net.sixtusdev.taskmanager.controller.admin;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -42,6 +44,13 @@ public class AdminController {
             @RequestParam(defaultValue = "5") int size) {
         Page<Task> paginatedTasks = adminService.getPaginatedTasks(page, size);
         return ResponseEntity.ok().body(paginatedTasks);
+    }
+
+    @DeleteMapping("/task/{taskId}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
+        adminService.deleteTask(taskId);
+        return ResponseEntity.ok().body(null);
+
     }
 
 }
