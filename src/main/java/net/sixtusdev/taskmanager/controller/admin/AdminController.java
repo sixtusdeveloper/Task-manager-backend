@@ -44,7 +44,7 @@ public class AdminController {
     @GetMapping("/tasks")
     public ResponseEntity<?> getPaginatedTasks(
             @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "5") int size) {
+            @RequestParam(defaultValue = "6") int size) {
         Page<Task> paginatedTasks = adminService.getPaginatedTasks(page, size);
         return ResponseEntity.ok().body(paginatedTasks);
     }
