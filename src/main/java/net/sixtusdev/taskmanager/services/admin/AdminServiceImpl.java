@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
+import java.lang.classfile.ClassFile.Option;
 import java.util.Comparator;
 import java.util.Date;
 
@@ -90,13 +91,15 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public TaskDTO updateTask(Long id, TaskDTO taskDTO) {
         Optional<Task> optionalTask = taskRepository.findById(id);
-        if (optionalTask.isPresent()) {
+        Optional<User> optionalUser = userRepositories.findById(taskDTO.getEmployeeId());
+        if (optionalTask.isPresent() && optionalUser.isPresent()) {
             Task existingTask = optionalTask.get();
             existingTask.setTitle(taskDTO.getTitle());
             existingTask.setDescription(taskDTO.getDescription());
             existingTask.setPriority(taskDTO.getPriority());
             existingTask.setDueDate(taskDTO.getDueDate());
             existingTask.setTaskStatus(mapStringToTaskStatus(String.valueOf(taskDTO.getTaskStatus())));
+            existingTask.setUser(optionalUser.get());
             return taskRepository.save(existingTask).getTaskDTO();
         }
         return null;
