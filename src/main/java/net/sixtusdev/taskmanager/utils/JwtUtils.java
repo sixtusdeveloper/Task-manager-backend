@@ -3,9 +3,12 @@ package net.sixtusdev.taskmanager.utils;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.security.Key;
 import java.util.function.Function;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -14,9 +17,16 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
+import net.sixtusdev.taskmanager.entities.User;
+import net.sixtusdev.taskmanager.repositories.UserRepositories;
 
 @Component
+@RequiredArgsConstructor
+
 public class JwtUtils {
+
+    private final UserRepositories userRepositories;
 
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
@@ -63,5 +73,16 @@ public class JwtUtils {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
+    }
+
+    public User getLoggedInUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            User user = (User) authentication.getPrincipal();
+            Optional<User> optionalUser = userRepositories.findById(user.getId());
+            return optionalUser.orElse(null);
+        }
+        return null;
     }
 }
