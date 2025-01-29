@@ -2,10 +2,13 @@ package net.sixtusdev.taskmanager.services.employee;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import net.sixtusdev.taskmanager.entities.Task;
 import net.sixtusdev.taskmanager.entities.User;
+import net.sixtusdev.taskmanager.enums.TaskStatus;
+
 import org.springframework.stereotype.Service;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -34,6 +37,28 @@ public class EmployeeServiceImpl implements EmployeeService {
                     .map(Task::getTaskDTO).collect(Collectors.toList());
         }
         throw new EntityNotFoundException("User not found");
+    }
+
+    @Override
+    public TaskDTO updateTask(Long id, String status) {
+        Optional<Task> taskOptional = taskRepository.findById(id);
+        if (taskOptional.isPresent()) {
+            Task existingTask = taskOptional.get();
+            existingTask.setTaskStatus(mapStringToTaskStatus(status));
+            return taskRepository.save(existingTask).getTaskDTO();
+
+        }
+        throw new EntityNotFoundException("Task not found");
+    }
+
+    private TaskStatus mapStringToTaskStatus(String status) {
+        return switch (status) {
+            case "PENDING" -> TaskStatus.PENDING;
+            case "INPROGRESS" -> TaskStatus.INPROGRESS;
+            case "COMPLETED" -> TaskStatus.COMPLETED;
+            case "DEFERRED" -> TaskStatus.DEFERRED;
+            default -> TaskStatus.CANCELLED;
+        };
     }
 
 }

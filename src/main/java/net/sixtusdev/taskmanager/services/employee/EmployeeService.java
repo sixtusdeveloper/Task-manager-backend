@@ -8,4 +8,6 @@ public interface EmployeeService {
 
     List<TaskDTO> getTasksByUserId();
 
+    TaskDTO updateTask(Long id, String status);
+
 }
