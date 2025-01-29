@@ -2,8 +2,11 @@ package net.sixtusdev.taskmanager.services.admin;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+
 import net.sixtusdev.taskmanager.dto.TaskDTO;
 import net.sixtusdev.taskmanager.dto.UserDto;
+import net.sixtusdev.taskmanager.entities.Task;
 
 public interface AdminService {
 
@@ -12,5 +15,7 @@ public interface AdminService {
     TaskDTO createTask(TaskDTO taskDTO);
 
     List<TaskDTO> getAllTasks();
+
+    Page<Task> getPaginatedTasks(int page, int size);
 
 }
