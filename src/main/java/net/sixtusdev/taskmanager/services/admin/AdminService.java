@@ -18,6 +18,6 @@ public interface AdminService {
 
     Page<Task> getPaginatedTasks(int page, int size);
 
-    void deleteTask(Long taskId);
+    void deleteTask(Long id);
 
 }

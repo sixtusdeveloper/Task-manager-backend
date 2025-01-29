@@ -46,9 +46,9 @@ public class AdminController {
         return ResponseEntity.ok().body(paginatedTasks);
     }
 
-    @DeleteMapping("/task/{taskId}")
-    public ResponseEntity<Void> deleteTask(@PathVariable Long taskId) {
-        adminService.deleteTask(taskId);
+    @DeleteMapping("/task/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        adminService.deleteTask(id);
         return ResponseEntity.ok().body(null);
 
     }
