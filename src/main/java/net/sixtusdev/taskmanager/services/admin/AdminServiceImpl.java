@@ -114,6 +114,13 @@ public class AdminServiceImpl implements AdminService {
             default -> TaskStatus.CANCELLED;
         };
     }
+
+    @Override
+    public List<TaskDTO> searchTaskByTitle(String title) {
+        return taskRepository.findByTitleContaining(title).stream()
+                .sorted(Comparator.comparing(Task::getDueDate).reversed())
+                .map(Task::getTaskDTO).collect(Collectors.toList());
+    }
 }
 
 // Original code without the pagination

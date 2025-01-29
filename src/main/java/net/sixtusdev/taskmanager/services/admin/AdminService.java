@@ -24,4 +24,5 @@ public interface AdminService {
 
     TaskDTO updateTask(Long id, TaskDTO taskDTO);
 
+    List<TaskDTO> searchTaskByTitle(String title);
 }
