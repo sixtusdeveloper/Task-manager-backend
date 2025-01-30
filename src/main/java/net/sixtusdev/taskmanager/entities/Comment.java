@@ -15,6 +15,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import net.sixtusdev.taskmanager.dto.CommentDTO;
 
 @Entity
 @Data
@@ -39,5 +40,19 @@ public class Comment {
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Task task;
+
+    public CommentDTO getCommentDTO() {
+
+        CommentDTO commentDTO = new CommentDTO();
+        commentDTO.setId(id);
+        commentDTO.setContent(content);
+        commentDTO.setCreatedAt(createdAt);
+        commentDTO.setTaskId(task.getId());
+        commentDTO.setUserId(user.getId());
+        commentDTO.setPostedBy(user.getName());
+
+        return commentDTO;
+
+    }
 
 }

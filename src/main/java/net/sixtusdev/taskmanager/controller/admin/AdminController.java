@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import net.sixtusdev.taskmanager.dto.CommentDTO;
 import net.sixtusdev.taskmanager.dto.TaskDTO;
 import net.sixtusdev.taskmanager.entities.Task;
 import net.sixtusdev.taskmanager.services.admin.AdminService;
@@ -73,6 +74,15 @@ public class AdminController {
     @GetMapping("/tasks/search/{title}")
     public ResponseEntity<List<TaskDTO>> searchTasK(@PathVariable String title) {
         return ResponseEntity.ok(adminService.searchTaskByTitle(title));
+    }
+
+    @PostMapping("/task/comment/{taskId}")
+    public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @RequestParam String content) {
+        CommentDTO createdCommentDTO = adminService.createComment(taskId, content);
+        if (createdCommentDTO == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCommentDTO);
     }
 
 }

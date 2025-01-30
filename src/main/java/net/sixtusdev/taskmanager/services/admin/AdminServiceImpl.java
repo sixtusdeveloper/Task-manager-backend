@@ -4,10 +4,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import net.sixtusdev.taskmanager.dto.CommentDTO;
 import net.sixtusdev.taskmanager.dto.TaskDTO;
+import net.sixtusdev.taskmanager.entities.Comment;
 import net.sixtusdev.taskmanager.entities.Task;
+import net.sixtusdev.taskmanager.repositories.CommentRepository;
 import net.sixtusdev.taskmanager.repositories.TaskRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,13 +28,19 @@ import net.sixtusdev.taskmanager.entities.User;
 import net.sixtusdev.taskmanager.enums.TaskStatus;
 import net.sixtusdev.taskmanager.enums.UserRole;
 import net.sixtusdev.taskmanager.repositories.UserRepositories;
+import net.sixtusdev.taskmanager.utils.JwtUtils;
 
 @Service
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService {
 
     private final TaskRepository taskRepository;
+
     private final UserRepositories userRepositories;
+
+    private final JwtUtils jwtUtils;
+
+    private final CommentRepository commentRepository;
 
     @Override
     public List<UserDto> getUsers() {
@@ -104,6 +116,29 @@ public class AdminServiceImpl implements AdminService {
         return null;
     }
 
+    @Override
+    public List<TaskDTO> searchTaskByTitle(String title) {
+        return taskRepository.findByTitleContaining(title).stream()
+                .sorted(Comparator.comparing(Task::getDueDate).reversed())
+                .map(Task::getTaskDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public CommentDTO createComment(Long taskId, String content) {
+        Optional<Task> optionalTask = taskRepository.findById(taskId);
+        User user = jwtUtils.getLoggedInUser();
+        if (optionalTask.isPresent() && user != null) {
+            Comment comment = new Comment();
+            comment.setCreatedAt(new Date());
+            comment.setContent(content);
+            comment.setTask(optionalTask.get());
+            comment.setUser(user);
+            return commentRepository.save(comment).getCommentDTO();
+        }
+        throw new EntityNotFoundException("User or Task not found");
+
+    }
+
     private TaskStatus mapStringToTaskStatus(String status) {
         return switch (status) {
             case "PENDING" -> TaskStatus.PENDING;
@@ -114,12 +149,6 @@ public class AdminServiceImpl implements AdminService {
         };
     }
 
-    @Override
-    public List<TaskDTO> searchTaskByTitle(String title) {
-        return taskRepository.findByTitleContaining(title).stream()
-                .sorted(Comparator.comparing(Task::getDueDate).reversed())
-                .map(Task::getTaskDTO).collect(Collectors.toList());
-    }
 }
 
 // Original code without the pagination

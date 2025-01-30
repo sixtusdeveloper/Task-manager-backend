@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.data.domain.Page;
 
+import net.sixtusdev.taskmanager.dto.CommentDTO;
 import net.sixtusdev.taskmanager.dto.TaskDTO;
 import net.sixtusdev.taskmanager.dto.UserDto;
 import net.sixtusdev.taskmanager.entities.Task;
@@ -25,4 +26,6 @@ public interface AdminService {
     TaskDTO updateTask(Long id, TaskDTO taskDTO);
 
     List<TaskDTO> searchTaskByTitle(String title);
+
+    CommentDTO createComment(Long taskId, String content);
 }
