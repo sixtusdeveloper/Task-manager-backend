@@ -7,10 +7,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+// import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
+import net.sixtusdev.taskmanager.dto.CommentDTO;
 import net.sixtusdev.taskmanager.dto.TaskDTO;
 import net.sixtusdev.taskmanager.services.employee.EmployeeService;
 
@@ -36,6 +40,25 @@ public class EmployeeContoller {
 
         return ResponseEntity.ok(updatedTaskDTO);
 
+    }
+
+    @GetMapping("/task/{id}")
+    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
+        return ResponseEntity.ok(employeeService.getTaskById(id));
+    }
+
+    @PostMapping("/task/comment/{taskId}")
+    public ResponseEntity<CommentDTO> createComment(@PathVariable Long taskId, @RequestParam String content) {
+        CommentDTO createdCommentDTO = employeeService.createComment(taskId, content);
+        if (createdCommentDTO == null)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdCommentDTO);
+    }
+
+    @GetMapping("/comments/{taskId}")
+    public ResponseEntity<List<CommentDTO>> getCommentByTaskId(@PathVariable Long taskId) {
+        return ResponseEntity.ok(employeeService.getCommentByTaskId(taskId));
     }
 
 }

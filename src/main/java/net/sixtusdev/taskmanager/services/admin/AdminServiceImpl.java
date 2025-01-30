@@ -91,15 +91,6 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
-    public TaskDTO getTaskById(Long id) {
-        Optional<Task> optionalTask = taskRepository.findById(id);
-        if (optionalTask.isPresent()) {
-            return optionalTask.map(Task::getTaskDTO).orElse(null);
-        }
-        return null;
-    }
-
-    @Override
     public TaskDTO updateTask(Long id, TaskDTO taskDTO) {
         Optional<Task> optionalTask = taskRepository.findById(id);
         Optional<User> optionalUser = userRepositories.findById(taskDTO.getEmployeeId());
@@ -121,6 +112,15 @@ public class AdminServiceImpl implements AdminService {
         return taskRepository.findByTitleContaining(title).stream()
                 .sorted(Comparator.comparing(Task::getDueDate).reversed())
                 .map(Task::getTaskDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public TaskDTO getTaskById(Long id) {
+        Optional<Task> optionalTask = taskRepository.findById(id);
+        if (optionalTask.isPresent()) {
+            return optionalTask.map(Task::getTaskDTO).orElse(null);
+        }
+        return null;
     }
 
     @Override
