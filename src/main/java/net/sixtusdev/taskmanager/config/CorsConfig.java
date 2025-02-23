@@ -13,7 +13,7 @@ public class CorsConfig implements WebMvcConfigurer {
         registry.addMapping("/api/**")
                 // Allows requests from this origin (e.g., Angular app running at
                 // localhost:4200)
-                .allowedOrigins("http://localhost:4200")
+                .allowedOrigins("https://task-manager-frontendv2-9nov-livid.vercel.app")
                 // Permits these HTTP methods
                 .allowedMethods("GET", "POST", "PUT", "DELETE")
                 // Allows cookies and credentials to be sent with requests
